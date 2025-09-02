@@ -10,10 +10,10 @@ function App() {
 
   return (
     <div className="login-container">
-      <h1>Get Started</h1>
+      <h1>Let's Go!</h1>
       <div className="login-form">
         <div>
-          <h2>Username:</h2>
+          <h2>Username</h2>
           <input
             type="text"
             value={username}
@@ -22,7 +22,7 @@ function App() {
           />
         </div>
         <div>
-          <h2>Password:</h2>
+          <h2>Password</h2>
           <input
             type="password"
             value={password}

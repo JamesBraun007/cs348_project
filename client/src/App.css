@@ -1,15 +1,21 @@
 #root {
-  max-width: 1280px;
+  background-image: url('./src/assets/gokuart.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100vw;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
 .login-container {
-  max-width: 400px;
-  margin: 80px auto;
+  max-width: 700px;
+  width: 80vw;
+  margin: 40px auto;
   padding: 32px;
-  background: #07137c5c;
+  background: #da540765; 
   border-radius: 12px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.12);
   display: flex;
@@ -19,23 +25,23 @@
 
 .login-container h1 {
   margin-bottom: 24px;
-  color: #fbfbfb;
+  color: #2055e4;
 }
 
 .login-container h2 {
   display: block;
   margin-bottom: 8px;
-  color: #0dc7d4;
+  color: #000000;
 }
 
 .login-container input {
-  width: 100%;
+  width: 75%;
   box-sizing: border-box;
   padding: 8px;
   margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .login-button-group {
@@ -59,5 +65,5 @@
 }
 
 .login-container button:hover {
-  background: #86a5d7;
+  background: #da5407;
 }
