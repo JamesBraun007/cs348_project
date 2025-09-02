@@ -5,41 +5,38 @@ import './App.css'
 import axios from 'axios';
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  const fetchApi = async () => {
-    const response = await axios.get("http://localhost:4040/api/users");
-    console.log(response.data);
-  };
-
-  useEffect(() => {
-    fetchApi();
-  }, []);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="login-container">
+      <h1>Get Started</h1>
+      <div className="login-form">
+        <div>
+          <h2>Username:</h2>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <h2>Password:</h2>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className="login-button-group">
+          <button type="button" onClick={() => alert('Log in clicked')}>Log in</button>
+          <button type="button" onClick={() => alert('Sign Up clicked')}>Sign Up</button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
 export default App
