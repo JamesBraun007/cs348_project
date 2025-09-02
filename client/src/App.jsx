@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div className="login-container">
-      <h1>Let's Go!</h1>
+      <h1>Training Arc | Start Your Saga.</h1>
       <div className="login-form">
         <div>
           <h2>Username</h2>
