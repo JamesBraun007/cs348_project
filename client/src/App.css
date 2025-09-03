@@ -1,13 +1,23 @@
 #root {
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.start-page {
   background-image: url('./src/assets/gokuart.gif');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
   width: 100vw;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-container {
@@ -42,6 +52,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 24px;
+  text-align: center;
 }
 
 .login-button-group {

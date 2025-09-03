@@ -9,30 +9,32 @@ function App() {
   const [password, setPassword] = useState("");
 
   return (
-    <div className="login-container">
-      <h1>Training Arc | Start Your Saga.</h1>
-      <div className="login-form">
-        <div>
-          <h2>Username</h2>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <h2>Password</h2>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="login-button-group">
-          <button type="button" onClick={() => alert('Log in clicked')}>Log in</button>
-          <button type="button" onClick={() => alert('Sign Up clicked')}>Sign Up</button>
+    <div className="start-page"> 
+      <div className="login-container">
+        <h1>Training Arc | Start Your Saga.</h1>
+        <div className="login-form">
+          <div>
+            <h2>Username</h2>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <h2>Password</h2>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="login-button-group">
+            <button type="button" onClick={() => alert('Log in clicked')}>Log in</button>
+            <button type="button" onClick={() => alert('Sign Up clicked')}>Sign Up</button>
+          </div>
         </div>
       </div>
     </div>
