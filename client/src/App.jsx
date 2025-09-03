@@ -1,12 +1,19 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import './App.css';
 import axios from 'axios';
+import Home from './Home';
 
-function App() {
+function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    // Here you would add your login logic (API call, etc.)
+    // For now, just redirect to Home
+    navigate('/home');
+  };
 
   return (
     <div className="start-page"> 
@@ -32,12 +39,23 @@ function App() {
             />
           </div>
           <div className="login-button-group">
-            <button type="button" onClick={() => alert('Log in clicked')}>Log in</button>
+            <button type="button" onClick={handleLogin}>Log in</button>
             <button type="button" onClick={() => alert('Sign Up clicked')}>Sign Up</button>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 
