@@ -20,9 +20,16 @@ def get_db():
     db.row_factory = make_dicts
     return db
 
-@app.route('/api/users', methods=['GET'])
-def get_users():
+def query_db(query, args=(), one=False):
+    cursor = get_db().execute(query, args)
+    rv = cursor.fetchall()
+    cursor.close()
+    return (rv[0] if rv else None) if one else rv
+
+@app.route('/api/login', methods=['GET', 'POST'])
+def get_existing_user():
     
+@app.route('/api/signup', methods=['GET', 'POST'])
 
 
 @app.teardown_appcontext

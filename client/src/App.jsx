@@ -10,9 +10,23 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    // Here you would add your login logic (API call, etc.)
-    // For now, just redirect to Home
-    navigate('/home');
+    const response = axios.post('http://localhost:4040/api/login', { username, password });
+    console.log('login response: ', response.data);
+    if (response.data.success) {
+      navigate('/home', { state: { userData: response.data } });
+    } else {
+      alert('Invalid username or password');
+    }
+  };
+
+  const handleSignUp = () => {
+    const response = axios.post('http://localhost:4040/api/signup', { username, password });
+    console.log('signup response: ', response.data);
+    if (response.data.success) {
+      navigate('/home', { state: { userData: response.data } });
+    } else {
+      alert('Username already exists');
+    }
   };
 
   return (
@@ -40,7 +54,7 @@ function LoginPage() {
           </div>
           <div className="login-button-group">
             <button type="button" onClick={handleLogin}>Log in</button>
-            <button type="button" onClick={() => alert('Sign Up clicked')}>Sign Up</button>
+            <button type="button" onClick={handleSignUp}>Sign Up</button>
           </div>
         </div>
       </div>
