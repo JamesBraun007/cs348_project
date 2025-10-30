@@ -1,8 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, g
 from flask_cors import CORS
-
 import sqlite3
-from flask import g
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
@@ -28,16 +27,36 @@ def query_db(query, args=(), one=False):
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def get_existing_user():
+    username = request.json.get('username')
+    password = request.json.get('password')
+
+    user = query_db('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], one=True)
+    if user is None:
+        return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+    
+    workouts = query_db('SELECT * FROM workouts WHERE user_id = ? ORDER BY date DESC', [user['id']])
+    return jsonify({'success': True, 'workouts': workouts}), 200
     
 @app.route('/api/signup', methods=['GET', 'POST'])
+def create_new_user():
+    username = request.json.get('username')
+    password = request.json.get('password')
 
+    existing_user = query_db('SELECT * FROM users WHERE username = ?', [username], one=True)
+    if existing_user:
+        return jsonify({'success': False, 'message': 'Username already exists'}), 401
+
+    db = get_db()
+    db.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+    db.commit()
+
+    return jsonify({'success': True, 'message': 'User created successfully'}), 200
 
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=4040)

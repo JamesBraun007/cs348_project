@@ -9,23 +9,33 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const response = axios.post('http://localhost:4040/api/login', { username, password });
-    console.log('login response: ', response.data);
-    if (response.data.success) {
+  const handleLogin = async () => {
+    if (!username || !password) {
+      alert('Username and password cannot be empty');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:4040/api/login', { username, password });
+      localStorage.setItem('userData', JSON.stringify(response.data));
       navigate('/home', { state: { userData: response.data } });
-    } else {
-      alert('Invalid username or password');
+    } catch (error) {
+      alert('Error logging in: ' + (error.response?.data?.message || error.message));
     }
   };
 
-  const handleSignUp = () => {
-    const response = axios.post('http://localhost:4040/api/signup', { username, password });
-    console.log('signup response: ', response.data);
-    if (response.data.success) {
-      navigate('/home', { state: { userData: response.data } });
-    } else {
-      alert('Username already exists');
+  const handleSignUp = async () => {
+    if (!username || !password) {
+      alert('Username and password cannot be empty');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:4040/api/signup', { username, password });
+      console.log('signup response: ', response.data);
+      navigate('/home',);
+    } catch (error) {
+      alert('Error signing up: ' + (error.response?.data?.message || error.message));
     }
   };
 
