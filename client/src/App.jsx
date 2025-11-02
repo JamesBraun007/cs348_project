@@ -17,9 +17,10 @@ function LoginPage() {
     }
 
     try {
-      const response = await axios.post('http://localhost:4040/api/login', { username, password });
-      localStorage.setItem('userData', JSON.stringify(response.data));
-      navigate('/home', { state: { userData: response.data } });
+      const response = await axios.post('http://localhost:4040/api/login_existing_user', { username, password });
+        localStorage.setItem('userId', response.data.user_id);
+        localStorage.setItem('workoutTypes', JSON.stringify(response.data.workout_types));
+      navigate('/home');
     } catch (error) {
       alert('Error logging in: ' + (error.response?.data?.message || error.message));
     }
@@ -32,8 +33,9 @@ function LoginPage() {
     }
 
     try {
-      const response = await axios.post('http://localhost:4040/api/signup', { username, password });
-      console.log('signup response: ', response.data);
+      const response = await axios.post('http://localhost:4040/api/create_new_user', { username, password });
+      localStorage.setItem('userId', response.data.user_id);
+      localStorage.setItem('workoutTypes', JSON.stringify(response.data.workout_types));     
       navigate('/home',);
     } catch (error) {
       alert('Error signing up: ' + (error.response?.data?.message || error.message));

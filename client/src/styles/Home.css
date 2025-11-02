@@ -1,5 +1,5 @@
 .home-page {
-  background-image: url('../src/assets/luffy.webp');
+  background-image: url('../src/assets/sololeveling.gif');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -12,6 +12,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #ff0000;
 }
 
 .add-workout-btn {
@@ -31,12 +32,13 @@
 
 .workout-form {
   margin-top: 2rem;
+  align-items: center;   /* ✅ centers all child elements horizontally */
   padding: 1.5rem;
   border-radius: 12px;
-  background-color: #f8f9fa;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  background-color: #ebe3c9;
+  border: 2px solid #007bff;
+  max-width: 800px;
+  margin: 0 auto;        /* ✅ ensures container itself is centered */
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
@@ -55,6 +57,7 @@
 .exercise-inputs input {
   flex: 1;
   padding: 8px;
+  margin-bottom: 16px; 
 }
 
 .form-buttons {
@@ -96,3 +99,60 @@
   background-color: #0056b3;
   transform: scale(1.05);
 }
+
+.workout-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.workout-notes {
+  margin-top: 1rem;
+}
+
+.add-type-form {
+  background-color: #ebe3c9;
+  border: 2px solid #007bff;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 300px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.add-type-form input,
+.add-type-form textarea {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid #007bff;
+  border-radius: 0.5rem;
+}
+
+.workout-type-row {
+  display: flex;
+  align-items: center;  
+  justify-content: center;  
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.add-type-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-type-btn:hover {
+  background: #0056b3;
+}
+
+.add-type-form p {
+  color: #007bff;
+}
+

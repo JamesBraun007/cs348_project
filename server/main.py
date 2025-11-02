@@ -19,25 +19,15 @@ def get_db():
     db.row_factory = make_dicts
     return db
 
+
 def query_db(query, args=(), one=False):
     cursor = get_db().execute(query, args)
     rv = cursor.fetchall()
     cursor.close()
     return (rv[0] if rv else None) if one else rv
 
-@app.route('/api/login', methods=['GET', 'POST'])
-def get_existing_user():
-    username = request.json.get('username')
-    password = request.json.get('password')
 
-    user = query_db('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], one=True)
-    if user is None:
-        return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
-    
-    workouts = query_db('SELECT * FROM workouts WHERE user_id = ? ORDER BY date DESC', [user['id']])
-    return jsonify({'success': True, 'workouts': workouts}), 200
-    
-@app.route('/api/signup', methods=['GET', 'POST'])
+@app.route('/api/create_new_user', methods=['GET', 'POST'])
 def create_new_user():
     username = request.json.get('username')
     password = request.json.get('password')
@@ -50,7 +40,49 @@ def create_new_user():
     db.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
     db.commit()
 
-    return jsonify({'success': True, 'message': 'User created successfully'}), 200
+    user_id = query_db('SELECT id FROM users WHERE username = ?', [username], one=True)['id']
+    return jsonify({'success': True, 'user_id': user_id, 'workout_types': []}), 200
+
+
+@app.route('/api/login_existing_user', methods=['GET', 'POST'])
+def login_existing_user():
+    username = request.json.get('username')
+    password = request.json.get('password')
+
+    user = query_db('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], one=True)
+    if user is None:
+        return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+    
+    workout_types = query_db('SELECT id, name FROM workout_types WHERE user_id = ?', [user['id']])
+    return jsonify({'success': True, 'user_id': user['id'], 'workout_types': workout_types}), 200
+
+
+@app.route('/api/add_new_workout_type', methods=['GET', 'POST'])
+def add_new_workout_type():
+    user_id = request.json.get('user_id')
+    name = request.json.get('name')
+    description = request.json.get('description')
+
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('INSERT INTO workout_types (user_id, name, description) VALUES (?, ?, ?)',
+                   (user_id, name, description))
+    db.commit()
+
+    new_type_id = cursor.lastrowid
+    cursor.close()
+
+    return jsonify({'success': True, 'id': new_type_id, 'name': name, 'description': description}), 201
+
+
+@app.route('/api/progress', methods=['GET', 'POST'])
+def get_user_workouts():
+    user_id = request.json.get('user_id')
+    
+    workouts = query_db('SELECT * FROM workouts WHERE user_id = ? ORDER BY date DESC', [user['id']])
+    return jsonify({'success': True, 'workouts': workouts}), 200
+    
+
 
 @app.teardown_appcontext
 def close_connection(exception):

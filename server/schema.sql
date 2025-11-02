@@ -8,8 +8,11 @@ CREATE TABLE users (
 -- Table: workout_types
 CREATE TABLE workout_types (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,         -- e.g., "Back/bi", "Chest/tri", "Cardio", etc 
-    description TEXT
+    user_id INTEGER,                     
+    name TEXT NOT NULL,                  -- e.g. "Back/bi", "Chest/tri"
+    description TEXT,
+    UNIQUE(user_id, name),               --same user can’t have duplicate names
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Table: workouts
