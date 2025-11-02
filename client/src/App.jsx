@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import './App.css';
+import './styles/App.css';
 import axios from 'axios';
 import Home from './Home';
+import Progress from './Progress';
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -78,6 +79,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<Home />} />
+         <Route path="/progress" element={<Progress />} />
       </Routes>
     </Router>
   );

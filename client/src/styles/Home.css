@@ -1,0 +1,98 @@
+.home-page {
+  background-image: url('../src/assets/luffy.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-workout-btn {
+  margin-top: 1rem;
+  padding: 0.7rem 1.5rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.add-workout-btn:hover {
+  background-color: #0056b3;
+}
+
+.workout-form {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.workout-form h2,
+.workout-form label,
+.workout-form p {
+  color: #007bff;
+}
+
+.exercise-inputs {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.exercise-inputs input {
+  flex: 1;
+  padding: 8px;
+}
+
+.form-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+}
+
+.cancel-btn:hover {
+  background-color: #b02a37;
+}
+
+.progress-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+  z-index: 100;
+}
+
+.progress-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
