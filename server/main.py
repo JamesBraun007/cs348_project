@@ -54,6 +54,7 @@ def login_existing_user():
         return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
     
     workout_types = query_db('SELECT id, name FROM workout_types WHERE user_id = ?', [user['id']])
+    print(workout_types)
     return jsonify({'success': True, 'user_id': user['id'], 'workout_types': workout_types}), 200
 
 
@@ -73,6 +74,33 @@ def add_new_workout_type():
     cursor.close()
 
     return jsonify({'success': True, 'id': new_type_id, 'name': name, 'description': description}), 201
+
+
+@app.route('/api/add_new_workout', methods=['GET', 'POST'])
+def add_new_workout():
+    user_id = request.json.get('user_id')
+    workout_type_id = request.json.get('workout_type_id')
+    exercises = request.json.get('exercises')
+    notes = request.json.get('notes')
+
+    if not user_id or not workout_type_id or not exercises:
+        return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("INSERT INTO workouts (user_id, type_id, notes) VALUES (?, ?, ?)" ,(user_id, workout_type_id, notes))
+    workout_id = cursor.lastrowid
+
+    for exercise in exercises:
+        cursor.execute('''INSERT INTO exercises (workout_id, name, sets, reps, weight, duration_minutes)
+                          VALUES (?, ?, ?, ?, ?, ?)''',
+                       (workout_id, exercise['name'], exercise['sets'], exercise['reps'],
+                        exercise.get('weight'), exercise.get('duration')))
+    db.commit()
+    cursor.close()
+
+    return jsonify({'success': True, 'workout_id': workout_id}), 201
 
 
 @app.route('/api/progress', methods=['GET', 'POST'])

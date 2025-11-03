@@ -37,7 +37,7 @@
   border-radius: 12px;
   background-color: #ebe3c9;
   border: 2px solid #007bff;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;        /* ✅ ensures container itself is centered */
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }

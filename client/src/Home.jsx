@@ -11,6 +11,8 @@ function Home() {
   const [showAddTypeForm, setShowAddTypeForm] = useState(false);
   const [newTypeName, setNewTypeName] = useState("");
   const [newTypeDesc, setNewTypeDesc] = useState("");
+  const [notes, setNotes] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -39,12 +41,15 @@ function Home() {
       return;
     }
 
-    const workoutData = { workoutType, exercises };
+    const newWorkoutData = { 
+      user_id: localStorage.getItem("userId"),
+      workout_type_id: workoutType,
+      exercises: exercises,
+      notes: notes
+    };
 
     try {
-      // Example API call (commented out for dev)
-      // const response = await axios.post("http://localhost:4040/api/add_workout", workoutData);
-
+      const response = await axios.post("http://localhost:4040/api/add_new_workout", newWorkoutData);
       setWorkoutType("");
       setExercises([]);
       setShowForm(false);
@@ -67,15 +72,13 @@ function Home() {
     }
 
     try {
-      const userId = localStorage.getItem("userId"); // ✅ separate from workout types
+      const userId = localStorage.getItem("userId"); 
 
       const response = await axios.post("http://localhost:4040/api/add_new_workout_type", {
         user_id: userId,
         name: newTypeName,
         description: newTypeDesc,
       });
-
-      console.log("Add workout type response:", response.data);
 
       if (response.data.success) {
         const newWt = {
@@ -174,6 +177,14 @@ function Home() {
                       handleExerciseChange(index, "weight", e.target.value)
                     }
                   />
+                  <input
+                    type="number"
+                    placeholder="Duration (mins)"
+                    value={exercise.duration}
+                    onChange={(e) =>
+                      handleExerciseChange(index, "duration", e.target.value)
+                    }
+                  />
                 </div>
               ))}
             </div>
@@ -187,6 +198,8 @@ function Home() {
                 placeholder="Optional notes about your workout..."
                 rows={4}
                 cols={50}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
               />
             </div>
 
