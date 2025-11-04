@@ -113,7 +113,7 @@ def get_user_workouts():
             w.id AS workout_id,
             w.date,
             w.notes,
-            wt.name AS workout_type,
+            wt.name AS type,
             e.id AS exercise_id,
             e.name AS exercise_name,
             e.sets,
@@ -153,6 +153,42 @@ def get_user_workouts():
     return jsonify({'success': True, 'workouts': list(workouts.values())}), 200
 
 
+@app.route('/api/get_user_workouts_by_type', methods=['POST'])
+def get_user_workouts_by_type():
+    data = request.get_json()
+    user_id = data['user_id']
+    type_id = data['type_id']
+
+    if type_id == "all":
+        query = """
+            SELECT w.id, w.date, w.notes, wt.name as type
+            FROM workouts w
+            LEFT JOIN workout_types wt ON w.type_id = wt.id
+            WHERE w.user_id = ?
+            ORDER BY w.date DESC
+        """
+        workouts = query_db(query, [user_id])
+    else:
+        query = """
+            SELECT w.id, w.date, w.notes, wt.name as type
+            FROM workouts w
+            LEFT JOIN workout_types wt ON w.type_id = wt.id
+            WHERE w.user_id = ? AND w.type_id = ?
+            ORDER BY w.date DESC
+        """
+        workouts = query_db(query, [user_id, type_id])
+
+    # Add exercises for each workout
+    for workout in workouts:
+        exercises = query_db('''SELECT id, name, sets, reps, weight, duration_minutes
+                                FROM exercises
+                                WHERE workout_id = ?''', [workout['id']])
+        workout['exercises'] = exercises
+
+    return jsonify({'success': True, 'workouts': workouts}), 200
+
+
+
 @app.route('/api/update_exercises', methods=['POST'])
 def update_exercises():
     data = request.get_json()
@@ -188,6 +224,7 @@ def delete_exercise():
     cursor.close()
 
     return jsonify({'success': True}), 200
+
 
 @app.teardown_appcontext
 def close_connection(exception):

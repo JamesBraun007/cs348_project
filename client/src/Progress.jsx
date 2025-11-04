@@ -6,17 +6,38 @@ function Progress() {
   const [workouts, setWorkouts] = useState([]);
   const [expandedWorkout, setExpandedWorkout] = useState(null);
   const [editedExercises, setEditedExercises] = useState({});
+  const [workoutTypes, setWorkoutTypes] = useState([]);
+  const [selectedType, setSelectedType] = useState("all");
 
   useEffect(() => {
+    const storedTypes = JSON.parse(localStorage.getItem("workoutTypes"));
+    if (storedTypes) {
+      setWorkoutTypes(storedTypes); // directly set array
+    }
+
+    fetchWorkouts("all");
+  }, []);
+
+  const fetchWorkouts = (type) => {
     const userId = localStorage.getItem("userId");
+
     axios
-      .post("http://localhost:4040/api/get_user_workouts", { user_id: userId })
+      .post("http://localhost:4040/api/get_user_workouts_by_type", {
+        user_id: userId,
+        type_id: type
+      })
       .then((res) => {
         setWorkouts(res.data.workouts);
-        console.log("Fetched workouts:", res.data.workouts);
+        setExpandedWorkout(null); // collapse rows when filtering
       })
       .catch((err) => console.error("Error fetching workouts:", err));
-  }, []);
+  };
+
+  const handleTypeFilterChange = (e) => {
+    const type = e.target.value;
+    setSelectedType(type);
+    fetchWorkouts(type);
+  };
 
   const toggleExpand = (id) => {
     setExpandedWorkout(expandedWorkout === id ? null : id);
@@ -50,6 +71,7 @@ function Progress() {
       await axios.post("http://localhost:4040/api/delete_exercise", {
         exercise_id: exerciseId,
       });
+
       setWorkouts((prev) =>
         prev.map((workout) =>
           workout.id === workoutId
@@ -91,6 +113,20 @@ function Progress() {
     <div className="progress-page">
       <h1>📊 Your Progress</h1>
 
+      {/* ✅ Workout Type Filter */}
+      <div className="filter-section">
+        <label>Filter by Workout Type: </label>
+        <select value={selectedType} onChange={handleTypeFilterChange}>
+          <option value="all">All</option>
+          {workoutTypes.map((wt) => (
+            <option key={wt.id} value={wt.id}>
+              {wt.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* ✅ Workout Table */}
       <table className="workout-table">
         <thead>
           <tr>
@@ -102,11 +138,10 @@ function Progress() {
         <tbody>
           {workouts.map((workout) => (
             <React.Fragment key={workout.id}>
-              <tr onClick={() => toggleExpand(workout.id)} className="workout-row">
+              <tr className="workout-row" onClick={() => toggleExpand(workout.id)}>
                 <td>{new Date(workout.date).toLocaleString()}</td>
-                {/* ✅ Ensure correct field name */}
-                <td>{workout.type ? workout.type : "Unknown Type"}</td>
-                <td>{workout.notes}</td>
+                <td>{workout.type}</td>
+                <td>{workout.notes || ""}</td>
               </tr>
 
               {expandedWorkout === workout.id && (
@@ -119,7 +154,7 @@ function Progress() {
                           <th>Sets</th>
                           <th>Reps</th>
                           <th>Weight</th>
-                          <th>Duration (min)</th>
+                          <th>Duration</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -130,12 +165,7 @@ function Progress() {
                               <input
                                 value={ex.name || ""}
                                 onChange={(e) =>
-                                  handleExerciseChange(
-                                    workout.id,
-                                    ex.id,
-                                    "name",
-                                    e.target.value
-                                  )
+                                  handleExerciseChange(workout.id, ex.id, "name", e.target.value)
                                 }
                               />
                             </td>
@@ -144,12 +174,7 @@ function Progress() {
                                 type="number"
                                 value={ex.sets || ""}
                                 onChange={(e) =>
-                                  handleExerciseChange(
-                                    workout.id,
-                                    ex.id,
-                                    "sets",
-                                    e.target.value
-                                  )
+                                  handleExerciseChange(workout.id, ex.id, "sets", e.target.value)
                                 }
                               />
                             </td>
@@ -158,12 +183,7 @@ function Progress() {
                                 type="number"
                                 value={ex.reps || ""}
                                 onChange={(e) =>
-                                  handleExerciseChange(
-                                    workout.id,
-                                    ex.id,
-                                    "reps",
-                                    e.target.value
-                                  )
+                                  handleExerciseChange(workout.id, ex.id, "reps", e.target.value)
                                 }
                               />
                             </td>
@@ -172,12 +192,7 @@ function Progress() {
                                 type="number"
                                 value={ex.weight || ""}
                                 onChange={(e) =>
-                                  handleExerciseChange(
-                                    workout.id,
-                                    ex.id,
-                                    "weight",
-                                    e.target.value
-                                  )
+                                  handleExerciseChange(workout.id, ex.id, "weight", e.target.value)
                                 }
                               />
                             </td>
@@ -196,12 +211,8 @@ function Progress() {
                               />
                             </td>
                             <td>
-                              <button
-                                onClick={() =>
-                                  handleDeleteExercise(workout.id, ex.id)
-                                }
-                              >
-                                🗑️ Delete
+                              <button onClick={() => handleDeleteExercise(workout.id, ex.id)}>
+                                🗑 Delete
                               </button>
                             </td>
                           </tr>
