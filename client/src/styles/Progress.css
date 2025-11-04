@@ -13,3 +13,100 @@
   justify-content: center;
   align-items: center;
 }
+
+.progress-page h1 {
+  color: #1a73e8;
+  margin-bottom: 10px;
+}
+
+.progress-page p {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.progress-table-container {
+  overflow-x: auto;
+}
+
+.workout-table {
+  color: #1a73e8;
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.workout-table th,
+.workout-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.workout-table th {
+  background-color: #eaf2fe;
+  color: #1a73e8;
+  font-weight: bold;
+}
+
+.workout-row {
+  cursor: pointer;
+  background-color: #fff;
+  transition: background 0.2s;
+}
+
+.workout-row:hover {
+  background-color: #f1f6ff;
+}
+
+.exercise-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.exercise-table th,
+.exercise-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.exercise-table th {
+  background-color: #f0f4ff;
+  color: #2a5bd7;
+}
+
+.no-data {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+.exercise-table input {
+  width: 70px;
+  padding: 4px;
+  text-align: center;
+}
+
+.save-changes-container {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.save-changes-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-changes-btn:hover {
+  background-color: #43a047;
+}
+

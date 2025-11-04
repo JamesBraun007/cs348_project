@@ -16,7 +16,6 @@ function Home() {
 
   const navigate = useNavigate();
 
-  // ✅ Load workout types and user_id separately from localStorage
   useEffect(() => {
     const storedWorkoutTypes = JSON.parse(localStorage.getItem("workoutTypes"));
     console.log("Loaded from localStorage:", storedWorkoutTypes);
@@ -73,7 +72,6 @@ function Home() {
 
     try {
       const userId = localStorage.getItem("userId"); 
-
       const response = await axios.post("http://localhost:4040/api/add_new_workout_type", {
         user_id: userId,
         name: newTypeName,

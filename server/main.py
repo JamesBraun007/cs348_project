@@ -103,14 +103,91 @@ def add_new_workout():
     return jsonify({'success': True, 'workout_id': workout_id}), 201
 
 
-@app.route('/api/progress', methods=['GET', 'POST'])
+@app.route('/api/get_user_workouts', methods=['POST'])
 def get_user_workouts():
-    user_id = request.json.get('user_id')
-    
-    workouts = query_db('SELECT * FROM workouts WHERE user_id = ? ORDER BY date DESC', [user['id']])
-    return jsonify({'success': True, 'workouts': workouts}), 200
-    
+    data = request.get_json()
+    user_id = data['user_id']
 
+    query = """
+        SELECT 
+            w.id AS workout_id,
+            w.date,
+            w.notes,
+            wt.name AS workout_type,
+            e.id AS exercise_id,
+            e.name AS exercise_name,
+            e.sets,
+            e.reps,
+            e.weight,
+            e.duration_minutes
+        FROM workouts w
+        LEFT JOIN workout_types wt ON w.type_id = wt.id
+        LEFT JOIN exercises e ON e.workout_id = w.id
+        WHERE w.user_id = ?
+        ORDER BY w.date DESC;
+    """
+
+    results = query_db(query, [user_id])
+    workouts = {}
+    for row in results:
+        wid = row['workout_id']
+        if wid not in workouts:
+            workouts[wid] = {
+                'id': wid,
+                'date': row['date'],
+                'notes': row['notes'],
+                'type': row['workout_type'],
+                'exercises': []
+            }
+        if row['exercise_id']:
+            workouts[wid]['exercises'].append({
+                'id': row['exercise_id'],
+                'name': row['exercise_name'],
+                'sets': row['sets'],
+                'reps': row['reps'],
+                'weight': row['weight'],
+                'duration_minutes': row['duration_minutes']
+            })
+
+    print(workouts.values())
+    return jsonify({'success': True, 'workouts': list(workouts.values())}), 200
+
+
+@app.route('/api/update_exercises', methods=['POST'])
+def update_exercises():
+    data = request.get_json()
+    exercises = data['exercises']
+
+    db = get_db()
+    cursor = db.cursor()
+
+    for exercise in exercises:
+        cursor.execute('''UPDATE exercises
+                          SET sets = ?, reps = ?, weight = ?, duration_minutes = ?
+                          WHERE id = ?''',
+                       (exercise['sets'], exercise['reps'],
+                        exercise.get('weight'), exercise.get('duration'), exercise['id']))
+    db.commit()
+    cursor.close()
+
+    return jsonify({'success': True}), 200
+
+
+@app.route('/api/delete_exercise', methods=['POST'])
+def delete_exercise():
+    data = request.get_json()
+    exercise_id = data.get('exercise_id')
+
+    if not exercise_id:
+        return jsonify({'success': False, 'error': 'Missing exercise_id'}), 400
+
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('DELETE FROM exercises WHERE id = ?', (exercise_id,))
+    db.commit()
+    cursor.close()
+
+    return jsonify({'success': True}), 200
 
 @app.teardown_appcontext
 def close_connection(exception):
