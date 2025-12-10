@@ -178,7 +178,6 @@ def get_user_workouts_by_type():
         """
         workouts = query_db(query, [user_id, type_id])
 
-    # Add exercises for each workout
     for workout in workouts:
         exercises = query_db('''SELECT id, name, sets, reps, weight, duration_minutes
                                 FROM exercises
@@ -197,12 +196,14 @@ def update_exercises():
     db = get_db()
     cursor = db.cursor()
 
+    print(exercises)
+
     for exercise in exercises:
         cursor.execute('''UPDATE exercises
                           SET sets = ?, reps = ?, weight = ?, duration_minutes = ?
                           WHERE id = ?''',
-                       (exercise['sets'], exercise['reps'],
-                        exercise.get('weight'), exercise.get('duration'), exercise['id']))
+                       (exercise.get('sets'), exercise.get('reps'),
+                        exercise.get('weight'), exercise.get('duration'), exercise.get('id')))
     db.commit()
     cursor.close()
 
