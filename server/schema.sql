@@ -33,3 +33,7 @@ CREATE TABLE exercises (
     duration_minutes REAL,              
     FOREIGN KEY (workout_id) REFERENCES workouts(id) ON DELETE CASCADE
 );
+
+CREATE INDEX index_workout_types ON workout_types(user_id);
+CREATE INDEX index_workouts ON workouts(user_id);
+CREATE INDEX index_exercises ON exercises(workout_id);
