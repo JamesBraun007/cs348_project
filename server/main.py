@@ -43,7 +43,7 @@ def create_new_user():
     user_id = query_db('SELECT id FROM users WHERE username = ?', [username], one=True)['id']
     return jsonify({'success': True, 'user_id': user_id, 'workout_types': []}), 200
 
-
+# This query benefits from the index_workout_types
 @app.route('/api/login_existing_user', methods=['GET', 'POST'])
 def login_existing_user():
     username = request.json.get('username')
@@ -102,7 +102,7 @@ def add_new_workout():
 
     return jsonify({'success': True, 'workout_id': workout_id}), 201
 
-
+# Added filtering by type but defaults to all workouts, so this API is unused for now
 @app.route('/api/get_user_workouts', methods=['POST'])
 def get_user_workouts():
     data = request.get_json()
@@ -152,7 +152,7 @@ def get_user_workouts():
     print(workouts.values())
     return jsonify({'success': True, 'workouts': list(workouts.values())}), 200
 
-
+# This query benefits from the index_workouts and index_exercises
 @app.route('/api/get_user_workouts_by_type', methods=['POST'])
 def get_user_workouts_by_type():
     data = request.get_json()

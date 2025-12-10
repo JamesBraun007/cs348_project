@@ -36,4 +36,5 @@ CREATE TABLE exercises (
 
 CREATE INDEX index_workout_types ON workout_types(user_id);
 CREATE INDEX index_workouts ON workouts(user_id);
+CREATE INDEX index_workouts_by_type ON workouts (user_id, type_id);
 CREATE INDEX index_exercises ON exercises(workout_id);
